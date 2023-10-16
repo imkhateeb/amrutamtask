@@ -61,10 +61,10 @@ module.exports = {
         },
         'slide-fwd': {
           '0%': {
-            transform: 'translateZ(0px)',
+            transform: 'translateX(200px)',
           },
           '100%': {
-            transform: 'translateZ(160px)',
+            transform: 'translateX(0px)',
           },
         },
         'fade-in': {

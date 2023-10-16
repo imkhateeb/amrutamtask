@@ -1,7 +1,7 @@
 import { BrowserRouter } from "react-router-dom";
 import Main from "./container/Main";
-import Navbar from "./components/Navbar";
-import Bottombar from "./components/Bottombar";
+import Navbar from "./components/Navigations/Navbar";
+import Bottombar from "./components/Navigations/Bottombar";
 
 export default function App() {
   return (

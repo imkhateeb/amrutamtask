@@ -19,7 +19,7 @@ const NavigationItem = ({ name, url, handleSidebar }) => {
 
 export default function Sidebar({handleSidebar}) {
   return (
-    <div>
+    <div className='z-auto'>
       <div className='w-full flex items-center justify-between my-4 px-4'>
         <h1 className='text-3xl font-bold text-green-900'><Link to="/" onClick={handleSidebar}>AMRUTA</Link></h1>
         <ImCross fontSize={30} className='font-bold text-green-800 cursor-pointer' onClick={handleSidebar} />

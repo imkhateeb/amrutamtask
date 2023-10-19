@@ -11,7 +11,7 @@ export default function Rightbar({ handleRightSidebar }) {
   const [alreadyUser, setAlreadyUser] = useState(false);
 
   return (
-    <div>
+    <div className='z-[1000]'>
       <div className='w-full flex items-center justify-between my-4 px-4'>
         <ImCross fontSize={30} className='font-bold text-green-800 cursor-pointer' onClick={handleRightSidebar} />
       </div>

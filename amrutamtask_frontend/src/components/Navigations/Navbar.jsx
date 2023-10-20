@@ -31,10 +31,10 @@ export default function Navbar() {
       className='flex flex-col justify-between w-full'
     >
       <div className='w-full flex items-center justify-center bg-green-800 text-white'>
-        <p className='py-4 px-5 text-center texlg font-semibold'>Get Personalised Prescription with a Free Chat Consultation from Ayurveda experts on the Amrutam App! 🌿 Download Now 🌼</p>
+        <p className='py-3 px-5 text-center text-lg max-md:text-sm max-sm:tex-sm font-semibold'>Get Personalised Prescription with a Free Chat Consultation from Ayurveda experts on the Amrutam App! 🌿 Download Now 🌼</p>
       </div>
       <div className='bg-secondaryColor flex flex-col w-full'>
-        <div className='flex justify-between w-[80%] mx-auto py-3 items-center my-3 max-sm:my-1 max-sm:w-11/12 max-md:w-5/6'>
+        <div className='flex justify-between w-[80%] mx-auto py-3 items-center max-md:w-11/12'>
           <div>
             <p className='max-md:hidden'>+91 9713171999</p>
             <HiMenuAlt1 fontSize={40} className='md:hidden font-bold cursor-pointer' onClick={() => {
@@ -42,7 +42,7 @@ export default function Navbar() {
             }} />
           </div>
 
-          <h1 className='text-3xl max-sm:text-2xl text-green-900 font-bold tracking-widest'><Link to="/">AMRUTAM</Link></h1>
+          <h1 className='text-3xl max-md:text-2xl text-green-900 font-bold tracking-widest'><Link to="/">AMRUTAM</Link></h1>
           <div className='flex gap-4 max-md:hidden'>
 
             <div className='cursor-pointer'><BsSearch fontSize={35} className='font-bold' /></div>

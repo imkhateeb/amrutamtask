@@ -37,6 +37,9 @@ app.use("/api", CreateUserRouter);
 const AuthUser = require('./Routers/auth/AuthUser');
 app.use("/api", AuthUser);
 
+const CreateSchedule = require('./Routers/medicineschedule/CreateSchedule');
+app.use("/api", CreateSchedule)
+
 app.listen(process.env.PORT, () => {
    console.log("Backend is listening in PORT 5000");
 });

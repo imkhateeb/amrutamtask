@@ -10,7 +10,7 @@ export default function App() {
         <div className="fixed top-0 w-full z-[1200]">
           <Navbar />
         </div>
-        <div className="h-screen bg-gradient-to-t from-white to-[#F3DBCE]">
+        <div className="min-h-screen bg-gradient-to-t from-white to-[#F3DBCE] pt-52 max-md:pt-40 max-md:pb-16">
           <Main />
         </div>
         <div className="md:hidden fixed bottom-0 w-full z-[1200]">

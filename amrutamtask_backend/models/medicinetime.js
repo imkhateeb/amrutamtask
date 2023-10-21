@@ -29,7 +29,7 @@ const medicineTimingSchema = new Schema({
    email: String,
    contactNo: String,
    whatsAppNo: String,
-   course: String,
+   courseStatus: String,
 });
 
 module.exports = mongoose.model("MedicineIntakeSchedule", medicineTimingSchema);

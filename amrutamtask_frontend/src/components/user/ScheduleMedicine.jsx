@@ -61,7 +61,7 @@ export default function ScheduleMedicine() {
 
   if (!user) {
     return (
-      <div className='flex justify-center min-h-full w-full animate-fade-in transition-all duration-300 ease-linear pt-36 md:pt-48'>
+      <div className='flex justify-center min-h-full w-full animate-fade-in transition-all duration-300 ease-linear'>
         <div className='w-1/3 max-lg:w-1/2 max-md:w-5/6 max-sm:w-11/12'>
           <div className={commonDivStyle}>
             <p className='text-semibold'>Medicine name<span className='text-red-500'>*</span></p>

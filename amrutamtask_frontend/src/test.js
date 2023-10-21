@@ -6,8 +6,7 @@ const User = require('../../models/user');
 const md5 = require('md5');
 
 router.get("/auth-user", async (req, res) => {
-   const authId = req.headers['authid'];
-   const password = req.headers['password'];
+   const {authId, password} = req.body;
 
    try {
       const myUser = await User.findOne({$and: [{$or: [{email: authId}, {contactNo: authId}]}, {password: md5(password)}]});

@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const md5 = require('md5');
+const {generateToken} = require('../../tokenSetup');
+
 
 const User = require('../../models/user');
 const Patient = require('../../models/patient');
@@ -11,6 +13,7 @@ router.post('/create-user', async (req, res) => {
 
    try {
       const existingUser = await User.findOne({ $or: [{ email }, { contactNo }] });
+
       if (existingUser) {
          res.json({ success: true, status: "userexist" });
       } else {
@@ -35,10 +38,17 @@ router.post('/create-user', async (req, res) => {
             const myPatient = new Patient(roleObj);
             await myPatient.save();
          }
-         res.json({ success: true, status: 'usercreated'});
+
+         
+         const authToken = generateToken(JSON.stringify(user._id));
+         
+
+         res.json({ success: true, status: 'usercreated', authToken});
+         
       }
+
    } catch (error) {
-      res.json({success: false})
+      res.json({ success: false })
    }
 });
 

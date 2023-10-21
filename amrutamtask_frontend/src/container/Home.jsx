@@ -14,12 +14,12 @@ export default function Home() {
     <div className='h-screen w-full flex items-center justify-center'>
       <div className='w-1/3 max-md:w-5/6 max-sm:w-11/12 py-6 px-3 bg-blend-multiply shadow-md rounded-3xl flex flex-col items-center justify-start'>
         <img 
-          src={user ? LoginImage : AddScheduleImage}
+          src={!user ? LoginImage : AddScheduleImage}
           alt='caring-img'
           className='w-5/6'
         />
 
-        {!user ? (
+        {user ? (
           <Link to={`/medicine/kasdhfkash/request-list`} className={`bg-yellow-300 hover:bg-yellow-200 text-black ${commonBtnStyle} flex items-center justify-center`}>Request List</Link>
         ):(
           <button

@@ -15,10 +15,10 @@ export default function Main() {
          <Route exact path='/*' element={<Home />} />
          <Route path='/login' element={<Login />} />
          <Route path='/signup' element={<Signup />} />
-         <Route path='/medicine/:userId/schedule' element={<ScheduleMedicine />} />
-         <Route path='/medicine/:userId/request-list' element={<RequestList />} />
-         <Route path='/caretaker/:userId/patient-list' element={<MyPatientList />} />
-         <Route path='/patient/:userId/medicine-schedules' element={<MyMedicineSchedules />}/>
+         <Route path='/medicine/add-schedule' element={<ScheduleMedicine />} />
+         <Route path='/medicine/request-list' element={<RequestList />} />
+         <Route path='/caretaker/my-patient-list' element={<MyPatientList />} />
+         <Route path='/patient/my-medicine-schedules' element={<MyMedicineSchedules />}/>
       </Routes>
    )
 }

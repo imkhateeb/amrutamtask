@@ -47,13 +47,13 @@ export default function Signup() {
   
   const saveData = async () => {
     const data = { name, email, contactNo, password, role }
+    setLoading(true)
     try {
-      setLoading(true)
       axios.post(url, data)
         .then((response) => {
           setLoading(false);
           if (response.data.success) {
-            const {status} = response.data.success;
+            const {status} = response.data;
 
             if ( status === 'userexist' ){
               setUserExists(true);
@@ -62,10 +62,9 @@ export default function Signup() {
               }, 3000);
             } else {
               setUserCreated(true);
-              localStorage.removeItem("TakeYourMedicineAuth")
               localStorage.setItem("TakeYourMedicineAuth", response.data.success.authToken)
               setTimeout(() => {
-                navigate("/");
+                window.location.href = "/";
               }, 3000);
             }
           } else {
@@ -90,6 +89,14 @@ export default function Signup() {
       setWrongOTP('mobileotp')
     } else {
       saveData();
+    }
+  }
+
+  if (localStorage.getItem("TakeYourMedicineAuth")) {
+    const currentLocation = window.location.href;
+
+    if (currentLocation == "http://localhost:3000/signup") {
+      window.location.href = "http://localhost:3000/"
     }
   }
 

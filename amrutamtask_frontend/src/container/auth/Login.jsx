@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import { BeatLoader } from 'react-spinners';
 import { IoCheckmarkDoneCircleSharp } from 'react-icons/io5';
-import {FaUserCheck} from 'react-icons/fa';
+import { FaUserCheck } from 'react-icons/fa';
 
 const commonDivStyle = 'flex flex-col my-2';
 const commonInputStyle = 'outline-none border-[0.5px] border-white hover:border-blue-300 py-2 px-3 rounded-md transition-all duration-200 ease-linear';
@@ -25,23 +25,23 @@ export default function Login() {
   const validateUser = async () => {
 
     const headers = {
-      'Content-Type':'application/json',
-      'authId':authId,
-      'password':password,
+      'Content-Type': 'application/json',
+      'authId': authId,
+      'password': password,
     };
     try {
       setLoading(true);
-      const response = await axios.get(url, {headers: headers});
+      const response = await axios.get(url, { headers: headers });
 
-      if ( response.data.success ){
+      if (response.data.success) {
         const { userExists } = response.data;
         setLoading(false);
-        if ( userExists ){
+        if (userExists) {
           setUserAuthenticated(true);
-          localStorage.removeItem("TakeYourMedicineAuth");
-          localStorage.setItem("TakeYourMedicineAuth", response.data.success.authToken);
+          localStorage.setItem("TakeYourMedicineAuth", response.data.authToken);
           setTimeout(() => {
-            navigate("/");
+            window.location.href = "/";
+
           }, 3000);
         } else {
           setUserDoesNotExists(true);
@@ -60,13 +60,21 @@ export default function Login() {
   }
 
   const handleSubmit = () => {
-    if ( !authId.replace(" ", "").length || password.replace(" ", "").length < 6 ){
+    if (!authId.replace(" ", "").length || password.replace(" ", "").length < 6) {
       setFields(true);
     } else {
       validateUser();
     }
   }
 
+
+  if (localStorage.getItem("TakeYourMedicineAuth")) {
+    const currentLocation = window.location.href;
+
+    if (currentLocation == "http://localhost:3000/login") {
+      window.location.href = "http://localhost:3000/"
+    }
+  }
 
   if (loading) {
     return (
@@ -82,8 +90,8 @@ export default function Login() {
       <div className='flex items-center justify-center h-[60vh] w-full animate-fade-in transition-all duration-300 ease-linear'>
         {userDoesNotExists && (
           <div className='flex flex-col items-center justify-center animate-fade-in duration-200 ease-in'>
-          <FaUserCheck fontSize={50} color='yellow'  />
-          <p className='text-black text-xl font-bold text-center'>User does not exist or internal Server Error!</p>
+            <FaUserCheck fontSize={50} color='yellow' />
+            <p className='text-black text-xl font-bold text-center'>User does not exist or internal Server Error!</p>
           </div>
         )}
         {userAuthenticated && (
@@ -104,21 +112,21 @@ export default function Login() {
 
           <div className={commonDivStyle}>
             <p className='text-semibold'>Email or Contact no<span className='text-red-500'>*</span></p>
-            <input type='text' className={commonInputStyle} placeholder='Input your credential' onChange={(e)=>setAuthId(e.target.value)}/>
+            <input type='text' className={commonInputStyle} placeholder='Input your credential' onChange={(e) => setAuthId(e.target.value)} />
             {fields && authId.replace(" ", "").length < 5 && (<p className='text-red-500 animate-fade-in duration-200'>Enter valid Credential!</p>)}
           </div>
 
           <div className={commonDivStyle}>
             <p className='text-semibold'>Password<span className='text-red-500'>*</span></p>
-            <input type='text' className={commonInputStyle} placeholder='Input your password' onChange={(e)=>setPassword(e.target.value)}/>
+            <input type='text' className={commonInputStyle} placeholder='Input your password' onChange={(e) => setPassword(e.target.value)} />
             {fields && password.replace(" ", "").length < 6 && (<p className='text-red-500 animate-fade-in duration-200'>Enter valid password!</p>)}
           </div>
 
           <div className={commonDivStyle}>
             <button
-            type='button'
-            className='py-2 px-3 bg-blue-600 hover:bg-blue-500 rounded-md transition-all duration-300 ease-linear text-white'
-            onClick={handleSubmit}
+              type='button'
+              className='py-2 px-3 bg-blue-600 hover:bg-blue-500 rounded-md transition-all duration-300 ease-linear text-white'
+              onClick={handleSubmit}
             >
               Login here!
             </button>

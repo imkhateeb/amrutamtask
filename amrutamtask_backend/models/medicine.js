@@ -25,11 +25,15 @@ const medicineTimingSchema = new Schema({
    to: String,
    frequency: String,
    times: [String],
-   postedAt: String,
+   postedAt: {
+      type: Date,
+      default: Date.now
+   },
    email: String,
    contactNo: String,
    whatsAppNo: String,
    courseStatus: String,
+   careBy: String,
 });
 
 module.exports = mongoose.model("MedicineIntakeSchedule", medicineTimingSchema);

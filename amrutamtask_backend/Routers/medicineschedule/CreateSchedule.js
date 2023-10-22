@@ -2,11 +2,14 @@ const express = require('express');
 const router = express.Router();
 
 const { verifyToken } = require('../../tokenSetup');
-const MedicineIntakeSchedule = require('../../models/medicinetime');
+const MedicineIntakeSchedule = require('../../models/medicine');
+const User = require('../../models/user');
 
 router.post("/medicine-schedule", async (req, res) => {
 
-   const {medicineNames, fequency, from, to, times, postedAt, email, contactNo, whatsAppNo, patient} = req.body;
+   const {medicineNames, fequency, from, to, times, email, contactNo, careBy} = req.body;
+
+   // console.log(req.body);
 
    const authorizationHeader = req.headers.authorization;
 
@@ -16,25 +19,36 @@ router.post("/medicine-schedule", async (req, res) => {
    }
 
    // Verify and decode the token
-   const decodedToken = verifyToken(authorizationHeader);
+   const parts = authorizationHeader.split(' ');
+   const decoded = verifyToken(parts[1]);
+   const sliced = decoded.slice(1, decoded.length-1);
 
-   if (!decodedToken) {
+   if (!sliced) {
       // Invalid or expired token
       return res.status(401).json({ success: false, message: "Invalid token." });
    };
 
+   const myUser = await User.findOne({_id: sliced});
+
+   if ( !myUser ){
+      return res.status(401).json({ success: false, message: "Not a trusted user." });
+   }
+
    try {
-      const patientObj = {medicineNames, fequency, from, to, times, postedAt, email, contactNo, whatsAppNo, patient};
+      const patient = {
+         name: myUser?.name,
+         userId: myUser?._id,
+      }
+
+      const patientObj = {medicineNames, fequency, from, to, times, email, contactNo, whatsAppNo: contactNo, patient, careBy, courseStatus: careBy == 'self' ? "running" : "Not Started"};
 
       const newPatient = new MedicineIntakeSchedule(patientObj);
       await newPatient.save();
    
       res.json({success: true})
    } catch (error) {
-      res.json({success: false})
+      res.json({success: false, message: 'Internal server error'})
    }
-
-
 });
 
 module.exports = router;

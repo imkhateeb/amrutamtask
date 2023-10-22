@@ -1,25 +1,67 @@
-const express = require('express');
-const router = express.Router();
-const {generateToken} = require('../../tokenSetup');
+// const mongoose = require("mongoose");
+// const { Schema } = mongoose;
 
-const User = require('../../models/user');
-const md5 = require('md5');
+// const medicineTimingSchema = new Schema({
+//    patient: {
+//       name: {
+//          type: String,
+//       },
+//       userId: {
+//          type: Schema.Types.ObjectId,
+//          ref: 'User',
+//       }
+//    },
+//    caretaker: {
+//       name: {
+//          type: String,
+//       },
+//       userId: {
+//          type: Schema.Types.ObjectId,
+//          ref: 'User',
+//       }
+//    },
+//    medicineNames: String,
+//    from: String,
+//    to: String,
+//    frequency: String,
+//    times: [String],
+//    postedAt: String,
+//    email: String,
+//    contactNo: String,
+//    whatsAppNo: String,
+//    courseStatus: String,
+// });
 
-router.get("/auth-user", async (req, res) => {
-   const {authId, password} = req.body;
+// module.exports = mongoose.model("MedicineIntakeSchedule", medicineTimingSchema);
 
-   try {
-      const myUser = await User.findOne({$and: [{$or: [{email: authId}, {contactNo: authId}]}, {password: md5(password)}]});
+// const mongoose = require('mongoose');
+// const { Schema } = mongoose;
 
-      if ( myUser ){
-         const authToken = generateToken(JSON.stringify(myUser._id));
-         res.json({success: true, userExists: true, authToken })
-      } else {
-         res.json({success: true, userExists: false})
-      }
-   } catch (error) {
-      res.json({success: false})
-   }
-})
+// const userSchema = new Schema({
+//    name: {
+//       type: 'String',
+//       required: true,
+//    },
+//    email: {
+//       type: 'String',
+//       required: true,
+//    },
+//    contactNo: {
+//       type: 'String',
+//       required: true,
+//    },
+//    password: {
+//       type: 'String',
+//       required: true,
+//    },
+//    role: {
+//       type: 'String',
+//       required: true,
+//    },
+//    dateCreated: {
+//       type: Date,
+//       default: Date.now,
+//    }
+// });
 
-module.exports = router;
+// module.exports = mongoose.model("User", userSchema);

@@ -38,7 +38,13 @@ const AuthUser = require('./Routers/auth/AuthUser');
 app.use("/api", AuthUser);
 
 const CreateSchedule = require('./Routers/medicineschedule/CreateSchedule');
-app.use("/api", CreateSchedule)
+app.use("/api", CreateSchedule);
+
+const GetUser = require('./Routers/GetUser');
+app.use("/api", GetUser);
+
+const RequestList = require('./Routers/medicineschedule/RequestList');
+app.use("/api", RequestList);
 
 app.listen(process.env.PORT, () => {
    console.log("Backend is listening in PORT 5000");

@@ -21,7 +21,7 @@ export default function Home() {
 
     const headers = {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      'Authorization': token,
     };
 
     try {

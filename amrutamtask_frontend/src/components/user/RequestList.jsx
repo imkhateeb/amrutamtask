@@ -1,78 +1,88 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import RequestCard from '../caretaker/RequestCard';
 import { BeatLoader } from 'react-spinners';
 import axios from 'axios';
 
-
 const url1 = 'http://localhost:5000/api/get-user';
 const url2 = 'http://localhost:5000/api/caretaker-request-list';
-
 
 export default function RequestList() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [serverError, setServerError] = useState(false);
   const [requestList, setRequestList] = useState([]);
+  const [seaechEnd, setSearchEnd] = useState(false)
 
   const fetchUser = (token) => {
     if (!token) {
       setUser(null);
-      setLoading(false); // Add this line
+      setLoading(false);
       return;
     }
     const headers = {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      'Authorization': token,
     };
     try {
       axios.get(url1, { headers: headers })
         .then((response) => {
           setUser(response.data.user);
-          setLoading(false); // Add this line
+        })
+        .catch((error) => {
+          console.log("Error while getting the user", error);
+        })
+        .finally(() => {
+          setLoading(false);
+          setSearchEnd(true);
         });
     } catch (error) {
       console.log("Error while getting the user", error);
-      setLoading(false); // Add this line
+      setLoading(false);
     }
   };
 
   const fetchMedicineRequests = () => {
-
     setLoading(true);
     try {
       axios.get(url2)
         .then((response) => {
           if (response.data.success) {
             setRequestList(response.data.requestlist);
-            setLoading(false);
           } else {
-            setLoading(false);
             setServerError(true);
             setTimeout(() => {
               navigate("/");
             }, 3000);
           }
         })
+        .catch((error) => {
+          console.error("Error while fetching medicine requests", error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     } catch (error) {
+      console.error("Error while fetching medicine requests", error);
       setLoading(false);
     }
-
-
-  }
+  };
 
   useEffect(() => {
-    setLoading(true);
     if (localStorage.getItem("TakeYourMedicineAuth")) {
       fetchUser(localStorage.getItem("TakeYourMedicineAuth"));
     } else {
-      setLoading(false)
+      setLoading(false);
     }
     fetchMedicineRequests();
   }, []);
 
+  useEffect(() => {
+    if (seaechEnd && user === null) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
 
   if (loading) {
     return (
@@ -83,23 +93,28 @@ export default function RequestList() {
       </div>
     )
   }
-  if (user === null) {
-    navigate("/login")
-  }
+
   return (
     <div className='flex flex-col w-full'>
       <div className='flex flex-wrap justify-evenly mx-auto max-sm:w-11/12 max-md:w-5/6 md:w-2/3 gap-2 md:gap-4'>
-        {requestList.length !== 0 && requestList?.map(({ patient:{name}, medicineNames, from, to, frequency, times, postedAt }) => (
-          <RequestCard
-            key={name + postedAt}
-            name={name}
-            medicineName={medicineNames}
+        {requestList.length !== 0 && requestList?.map(({patient, caretaker, medicineNames, from, to, frequency, times, postedAt, contactNo, whatsAppNo, courseStatus, email, _id})=>(
+          <RequestCard 
+            key={postedAt}
+            patientName={patient.name}
+            patientId={patient.userId}
+            caretakerName={caretaker ? caretaker.name : ''}
+            caretakerId={caretaker ? caretaker.userId : ''}
+            contactNo={contactNo}
+            whatsAppNo={whatsAppNo}
+            email={email}
+            courseStatus={courseStatus}
+            medicineNames={medicineNames}
             from={from}
             to={to}
             frequency={frequency}
             times={times}
             postedAt={postedAt}
-            // userId={userId}
+            requestId={_id}
             taken={false}
           />
         ))}

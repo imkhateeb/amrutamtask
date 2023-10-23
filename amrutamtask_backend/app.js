@@ -16,7 +16,7 @@ const response = connectDB();
 
 // Enabling CORS for request from http://localhost:3000 - My react frontend
 const cors = require('cors');
-app.use(cors({ origin: 'http://localhost:3000'}));
+app.use(cors());
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -45,6 +45,15 @@ app.use("/api", GetUser);
 
 const RequestList = require('./Routers/medicineschedule/RequestList');
 app.use("/api", RequestList);
+
+const AcceptRequest = require('./Routers/medicineschedule/AcceptRequest');
+app.use("/api", AcceptRequest);
+
+const GetMyPatient = require('./Routers/medicineschedule/GetMyPatient');
+app.use("/api", GetMyPatient);
+
+const MyScheduleList = require('./Routers/medicineschedule/MyScheduleList');
+app.use("/api", MyScheduleList);
 
 app.listen(process.env.PORT, () => {
    console.log("Backend is listening in PORT 5000");

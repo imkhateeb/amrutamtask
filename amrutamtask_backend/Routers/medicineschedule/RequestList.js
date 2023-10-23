@@ -1,20 +1,34 @@
 const express = require('express');
 const router = express.Router();
+const {verifyToken} = require('../../tokenSetup');
 
+const User = require('../../models/user');
 const MedicineIntakeSchedule = require('../../models/medicine');
 
-const url2 = 'http://localhost:5000/api/caretaker-request-list';
-router.get("/caretaker-request-list", async (req, res)=>{
-        try {
+router.get("/caretaker-request-list", async (req, res) => {
+   const token = req.headers['token'];
 
-                const requestlist = await MedicineIntakeSchedule.find();
 
-                res.json({success: true, requestlist})
-                
-        } catch (error) {
-                res.json({success: false})
-                
-        }
+   try {
+
+      const decoded = verifyToken(token);
+      const userId = decoded.slice(1, decoded.length-1);
+
+      const myUser = await User.findOne({_id: userId});
+
+      if ( myUser?.role ){
+
+         const requestlist = await MedicineIntakeSchedule.find({$and: [{ careBy: 'inperson' }, {courseStatus: 'Not Started'}]});
+         
+         return res.json({ success: true, requestlist })
+      } else {
+         return res.json({success: false});
+      }
+
+   } catch (error) {
+      res.json({ success: false })
+
+   }
 })
 
 module.exports = router;

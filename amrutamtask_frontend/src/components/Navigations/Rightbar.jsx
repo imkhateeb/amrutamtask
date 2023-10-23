@@ -31,7 +31,7 @@ export default function Rightbar({ handleRightSidebar }) {
     }
     const headers = {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      'Authorization': token,
     };
     try {
       axios.get(url, { headers: headers })

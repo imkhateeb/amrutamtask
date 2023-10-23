@@ -72,7 +72,7 @@ export default function ScheduleMedicine() {
     }
     const headers = {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      'Authorization': token,
     };
     try {
       axios.get(url1, { headers: headers })

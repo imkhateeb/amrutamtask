@@ -7,13 +7,13 @@ const User = require('../models/user');
 
 router.get("/get-user", async (req, res) => {
    const token = req.headers.authorization;
-
+// console.log(token);
    if (!token) {
       return res.status(401).json({ success: false, message: 'Authorization header is missing' });
    }
 
-   const parts = token.split(' ');
-   const decoded = verifyToken(parts[1]);
+   const decoded = verifyToken(token);
+   // console.log(decoded);
    const sliced = decoded.slice(1, decoded.length-1);
    try {
       const myUser = await User.findOne({ _id: sliced });

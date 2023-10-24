@@ -25,7 +25,6 @@ router.get('/accept-medicine-schedule', async (req, res) => {
                name: myUser.name,
                userId,
             }
-            console.log(mySchedule);
             mySchedule.courseStatus = 'running';
             await mySchedule.save();
             console.log("Accepted");

@@ -23,9 +23,8 @@ body {
 
 /* Handle (the draggable part of the scrollbar) */
 ::-webkit-scrollbar-thumb {
-        background: #888;
+        background: #5e5d5d;
         /* color of the handle */
-        border-radius: 5px;
         /* border radius of the handle */
 }
 
@@ -43,7 +42,7 @@ body {
 
 /* Track of the horizontal scrollbar */
 ::-webkit-scrollbar-track:horizontal {
-        background: #f1f1f1;
+        background: #232323;
         /* background color of the track */
 }
 
@@ -51,7 +50,6 @@ body {
 ::-webkit-scrollbar-thumb:horizontal {
         background: #888;
         /* color of the handle */
-        border-radius: 5px;
         /* border radius of the handle */
 }
 

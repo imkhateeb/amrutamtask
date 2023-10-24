@@ -20,7 +20,7 @@ export default function ScheduleMedicine() {
   const [user, setUser] = useState(null);
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
-  const [mediceneNames, setMediceneNames] = useState("");
+  const [medicineNames, setMedicineNames] = useState("");
   const [frequency, setFrequency] = useState(0);
   const [times, setTimes] = useState([]);
   const [alltimeEntered, setAlltimeEntered] = useState(false);
@@ -30,6 +30,7 @@ export default function ScheduleMedicine() {
   const [serverError, setServerError] = useState(false);
   const [timeSaved, setTimeSaved] = useState(false);
 
+
   const handleCaretaker = (careBy) => {
     const token = localStorage.getItem("TakeYourMedicineAuth");
     const {email, contactNo} = user;
@@ -37,7 +38,7 @@ export default function ScheduleMedicine() {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
     }
-    const data = { mediceneNames, from, to, frequency, times, careBy, email, contactNo }
+    const data = { medicineNames, from, to, frequency, times, careBy, email, contactNo }
 
     try {
       setSaving(true);
@@ -150,15 +151,15 @@ export default function ScheduleMedicine() {
       <div className='w-1/3 max-lg:w-1/2 max-md:w-5/6 max-sm:w-11/12'>
         <div className={commonDivStyle}>
           <p className='text-semibold'>Medicine name<span className='text-red-500'>*</span></p>
-          <input type='text' className={commonInputStyle} placeholder='Input mediceneNames name' onChange={(e) => setMediceneNames(e.target.value)} />
-          {from && !mediceneNames && <p className='text-red-500 animate-fade-in duration-200 ease-linear'>
-            Input mediceneNames name
+          <input type='text' className={commonInputStyle} placeholder='Input medicene name(s)' onChange={(e) => setMedicineNames(e.target.value)} />
+          {medicineNames.length === 1 && <p className='text-red-500 animate-fade-in duration-200 ease-linear'>
+            Input a valid medicine name
           </p>}
         </div>
 
         <div className='flex justify-between my-4'>
 
-          {mediceneNames && (
+          {medicineNames && (
             <div className='flex flex-col'>
               <p>From date<span className='text-red-500'>*</span></p>
               <Space direction="vertical">
@@ -183,7 +184,7 @@ export default function ScheduleMedicine() {
           )}
         </div>
 
-        {mediceneNames && from && to && from !== "past" && to !== "wrong" && (
+        {medicineNames && from && to && from !== "past" && to !== "wrong" && (
           <div className={commonDivStyle}>
             <p>How often in a day?<span className='text-red-500'>*</span></p>
             <input type='number' className={commonInputStyle} onChange={handleFrequency}

@@ -30,7 +30,6 @@ export default function Home() {
         headers: headers,
       });
 
-      setLoading(false)
       if (response.ok) {
         const data = await response.json();
         setUser(data?.user)
@@ -38,6 +37,7 @@ export default function Home() {
         console.log("Error while getting the user");
         console.error(await response.text());
       }
+      setLoading(false);
     } catch (error) {
       console.log("Error while getting the user", error);
     }

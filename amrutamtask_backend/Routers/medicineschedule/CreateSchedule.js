@@ -7,7 +7,7 @@ const User = require('../../models/user');
 
 router.post("/medicine-schedule", async (req, res) => {
 
-   const {medicineNames, fequency, from, to, times, email, contactNo, careBy} = req.body;
+   const {medicineNames, frequency, from, to, times, email, contactNo, careBy} = req.body;
 
    // console.log(req.body);
 
@@ -22,6 +22,8 @@ router.post("/medicine-schedule", async (req, res) => {
    const parts = authorizationHeader.split(' ');
    const decoded = verifyToken(parts[1]);
    const sliced = decoded.slice(1, decoded.length-1);
+
+   const scheduleReminders = require('../../scheduler');
 
    if (!sliced) {
       // Invalid or expired token
@@ -40,10 +42,12 @@ router.post("/medicine-schedule", async (req, res) => {
          userId: myUser?._id,
       }
 
-      const patientObj = {medicineNames, fequency, from, to, times, email, contactNo, whatsAppNo: contactNo, patient, careBy, courseStatus: careBy == 'self' ? "running" : "Not Started"};
-
+      const patientObj = {medicineNames, frequency, from, to, times, email, contactNo, whatsAppNo: contactNo, patient, careBy, courseStatus: careBy == 'self' ? "running" : "Not Started"};
       const newPatient = new MedicineIntakeSchedule(patientObj);
       await newPatient.save();
+      
+      scheduleReminders({medicineNames, frequency, from, to, times, email, contactNo, whatsAppNo: contactNo, scheduleId: newPatient?._id});
+
    
       res.json({success: true})
    } catch (error) {

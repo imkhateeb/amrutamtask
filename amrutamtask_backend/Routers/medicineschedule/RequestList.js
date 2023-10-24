@@ -19,8 +19,9 @@ router.get("/caretaker-request-list", async (req, res) => {
       if ( myUser?.role ){
 
          const requestlist = await MedicineIntakeSchedule.find({$and: [{ careBy: 'inperson' }, {courseStatus: 'Not Started'}]});
+         const finalList = [...requestlist].reverse();
          
-         return res.json({ success: true, requestlist })
+         return res.json({ success: true, requestlist: finalList, user: myUser })
       } else {
          return res.json({success: false});
       }

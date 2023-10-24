@@ -4,8 +4,7 @@ import RequestCard from '../caretaker/RequestCard';
 import { BeatLoader } from 'react-spinners';
 import axios from 'axios';
 
-const url1 = 'http://localhost:5000/api/get-user';
-const url2 = 'http://localhost:5000/api/caretaker-request-list';
+const url = 'http://localhost:5000/api/caretaker-request-list';
 
 export default function RequestList() {
   const navigate = useNavigate();
@@ -15,40 +14,17 @@ export default function RequestList() {
   const [requestList, setRequestList] = useState([]);
   const [seaechEnd, setSearchEnd] = useState(false)
 
-  const fetchUser = (token) => {
-    if (!token) {
-      setUser(null);
-      setLoading(false);
-      return;
-    }
-    const headers = {
-      'Content-Type': 'application/json',
-      'Authorization': token,
-    };
-    try {
-      axios.get(url1, { headers: headers })
-        .then((response) => {
-          setUser(response.data.user);
-        })
-        .catch((error) => {
-          console.log("Error while getting the user", error);
-        })
-        .finally(() => {
-          setLoading(false);
-          setSearchEnd(true);
-        });
-    } catch (error) {
-      console.log("Error while getting the user", error);
-      setLoading(false);
-    }
-  };
-
-  const fetchMedicineRequests = () => {
+  const fetchMedicineRequests = (token) => {
     setLoading(true);
+    const headers = {
+      'Content-Type':'application/json',
+      'token':token
+    }
     try {
-      axios.get(url2)
+      axios.get(url, {headers: headers})
         .then((response) => {
           if (response.data.success) {
+            setUser(response.data.user);
             setRequestList(response.data.requestlist);
           } else {
             setServerError(true);
@@ -71,11 +47,10 @@ export default function RequestList() {
 
   useEffect(() => {
     if (localStorage.getItem("TakeYourMedicineAuth")) {
-      fetchUser(localStorage.getItem("TakeYourMedicineAuth"));
+      fetchMedicineRequests(localStorage.getItem("TakeYourMedicineAuth"));
     } else {
       setLoading(false);
     }
-    fetchMedicineRequests();
   }, []);
 
   useEffect(() => {

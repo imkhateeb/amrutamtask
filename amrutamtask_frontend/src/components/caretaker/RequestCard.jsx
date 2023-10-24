@@ -8,9 +8,11 @@ const token = localStorage.getItem('TakeYourMedicineAuth');
 const url = 'http://localhost:5000/api/accept-medicine-schedule';
 
 export default function RequestCard({ patientName, caretaker, patientId, caretakerName, caretakerId, contactNo, whatsAppNo, email, courseStatus, medicineNames, from, to, times, postedAt, taken, requestId, careBy }) {
+
   const [accepting, setAccepting] = useState(false);
   const [internalServerError, setInternalServerError] = useState(false);
   const [accepted, setAccepted] = useState(false);
+  const [confirmAccept, setConfirmAccept] = useState(false);
 
   const handleAccept = async () => {
     const headers = {
@@ -76,14 +78,33 @@ export default function RequestCard({ patientName, caretaker, patientId, caretak
         </div>
         <div className='w-full'>
           {!taken ? (
-            <button
-              type='button'
-              className='cursor-pointer py-1 mt-5 px-3 bg-blue-600 hover:bg-blue-500 text-white transition-all duration-200 ease-linear rounded-md '
-              onClick={handleAccept}
-              disabled={accepting}
-            >
-              {accepting ? 'Accepting...' : 'Accept!'}
-            </button>
+            !confirmAccept ?
+              <button
+                type='button'
+                className='cursor-pointer py-1 mt-5 px-3 bg-blue-600 hover:bg-blue-500 text-white transition-all duration-200 ease-linear rounded-md '
+                onClick={() => setConfirmAccept(true)}
+                disabled={confirmAccept}
+              >
+                Accept!
+              </button>
+              :
+              <div className='flex gap-2'>
+                <button
+                  type='button'
+                  className='cursor-pointer py-1 mt-5 px-3 bg-yellow-400 hover:bg-yellow-300 text-black transition-all duration-200 ease-linear rounded-md '
+                  onClick={handleAccept}
+                  disabled={accepting}
+                >{accepting ? 'Accepting...' : 'Confirm!'}
+                </button>
+                <button
+                  type='button'
+                  className='cursor-pointer py-1 mt-5 px-3 text-red-600 hover:text-red-500 transition-all duration-200 ease-linear rounded-md '
+                  onClick={() => setConfirmAccept(false)}
+                  disabled={!confirmAccept}
+                >
+                  Cancel
+                </button>
+              </div>
           ) : (
             <div>
               {courseStatus === 'running' && caretaker && (

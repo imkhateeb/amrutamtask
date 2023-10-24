@@ -17,7 +17,8 @@ router.get("/my-patient-list", async (req, res) => {
          const totalList = await MedicineIntakeSchedule.find();
          const patientList = totalList.filter((patient)=>patient.caretaker.userId == userId)
 
-         return res.json({ success: true, patientList, user: myUser })
+         const finalList = [...patientList].reverse();
+         return res.json({ success: true, patientList:finalList, user: myUser })
       } else {
          return res.json({ success: false });
       }

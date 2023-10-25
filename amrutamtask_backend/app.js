@@ -2,11 +2,6 @@
 const dotenv = require('dotenv');
 dotenv.config();
 
-// const schedule = require('node-schedule');
-// schedule.scheduleJob('*/5 * * * * *', ()=>{
-//     console.log("Task - 1: Done");
-// })
-
 // initializing an express server
 const express = require('express');
 const app = express();
@@ -28,11 +23,6 @@ app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something went wrong!');
 });
-
-// Define a simple route for the root URL
-// app.get("/", (req, res) => {
-//     res.send('Your app is added with a backend now');
-// });
 
 
 // Routes
@@ -59,6 +49,12 @@ app.use("/api", GetMyPatient);
 
 const MyScheduleList = require('./Routers/medicineschedule/MyScheduleList');
 app.use("/api", MyScheduleList);
+
+const GetAllCaretaker = require('./Routers/getAllCaretaker');
+app.use("/api", GetAllCaretaker);
+
+const CompleteCourse = require('./Routers/medicineschedule/CompleteCourse');
+app.use("/api", CompleteCourse);
 
 app.listen(process.env.PORT, () => {
    console.log("Backend is listening in PORT 5000");

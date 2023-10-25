@@ -3,8 +3,10 @@ const moment = require('moment');
 
 const Medication = require('./models/medicine');
 
+const SendToAll = require('./mainSender');
+
 async function scheduleReminders(userInput) {
-  const { from, to, frequency, times, scheduleId } = userInput;
+  const { from, to, frequency, times, scheduleId, patientName, medicineNames, email, to_number} = userInput;
   const startDate = moment(from, 'YYYY-MM-DD');
   const endDate = moment(to, 'YYYY-MM-DD');
 
@@ -33,13 +35,20 @@ async function scheduleReminders(userInput) {
             { _id: scheduleId }, // Add the correct query to identify the medication in your database
             { $set: { courseStatus: 'completed' } }
           );
-          // Replace this with your code to send the reminder
-          // You can use email, push notifications, or any other method
-          console.log("It was the last call");
+
+          console.log(`Hey ${patientName} it's a reminder for last dose of ${medicineNames} at ${reminderDate.format('YYYY-MM-DD HH:mm:ss')}. Stay healthy, Stay safe`);
+          
+          const message = `Hey ${patientName} it's a reminder for last dose of ${medicineNames} at ${reminderDate.format('YYYY-MM-DD HH:mm:ss')}. Stay healthy, Stay safe`
+          SendToAll(patientName, email, message, to_number);
+
         } else {
-          // Replace this with your code to send the reminder
-          // You can use email, push notifications, or any other method
-          console.log(`Reminder for ${userInput.mediceneNames} at ${reminderDate.format('YYYY-MM-DD HH:mm:ss')}`);
+          
+          console.log(`Reminder for dose of ${userInput.mediceneNames} at ${reminderDate.format('YYYY-MM-DD HH:mm:ss')}. Stay healthy, Stay safe`);
+
+          const message = `Hey ${patientName} it's a reminder for dose of ${medicineNames} at ${reminderDate.format('YYYY-MM-DD HH:mm:ss')}. Stay healthy, Stay safe`
+          SendToAll(patientName, email, message, to_number);
+
+
         }
       });
     }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import generateRandom6DigitNumber from '../../utils/randomNumber';
 import axios from 'axios';
 import { BeatLoader } from 'react-spinners';
@@ -36,6 +36,8 @@ export default function Signup() {
   const [userExists, setUserExists] = useState(false);
   const [userCreated, setUserCreated] = useState(false);
 
+  const [submitted, setSubmitted] = useState(false);
+
   const handleCredentials = () => {
     if (!name || !email || !contactNo || !password || !role) {
       setFields(true);
@@ -43,7 +45,6 @@ export default function Signup() {
       setOTPsent(true);
     }
   }
-  
   
   const saveData = async () => {
     const data = { name, email, contactNo, password, role }
@@ -62,9 +63,9 @@ export default function Signup() {
               }, 3000);
             } else {
               setUserCreated(true);
-              localStorage.setItem("TakeYourMedicineAuth", response.data.success.authToken)
+              localStorage.setItem("TakeYourMedicineAuth", response.data.authToken)
               setTimeout(() => {
-                window.location.href = "/";
+                navigate("/")
               }, 3000);
             }
           } else {
@@ -88,6 +89,7 @@ export default function Signup() {
     } else if (generatePhoneOTP !== mobileOTP) {
       setWrongOTP('mobileotp')
     } else {
+      setSubmitted(true);
       saveData();
     }
   }
@@ -194,9 +196,19 @@ export default function Signup() {
               type='button'
               className='py-2 px-3 bg-blue-600 hover:bg-blue-500 rounded-md transition-all duration-300 ease-linear text-white'
               onClick={!OTPsent ? handleCredentials : handleSubmit}
+              disabled={submitted}
             >
               {!OTPsent ? 'Verify Credentials!' : 'Submit'}
             </button>
+          </div>
+          <div className={`flex items-center gap-2 max-md:hidden`}>
+            <p>Already a user?</p>
+            <Link
+            to={"/login"}
+            className='text-blue-600 underline cursor-pointer hover:text-blue-500 transition-all duration-200 ease-linear'
+            >
+              Login now!
+            </Link>
           </div>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import { BeatLoader } from 'react-spinners';
@@ -40,8 +40,7 @@ export default function Login() {
           setUserAuthenticated(true);
           localStorage.setItem("TakeYourMedicineAuth", response.data.authToken);
           setTimeout(() => {
-            window.location.href = "/";
-
+            navigate("/")
           }, 3000);
         } else {
           setUserDoesNotExists(true);
@@ -127,9 +126,19 @@ export default function Login() {
               type='button'
               className='py-2 px-3 bg-blue-600 hover:bg-blue-500 rounded-md transition-all duration-300 ease-linear text-white'
               onClick={handleSubmit}
+              disabled={loading}
             >
               Login here!
             </button>
+          </div>
+          <div className={`flex items-center gap-2 max-md:hidden`}>
+            <p>New user?</p>
+            <Link
+            to={"/signup"}
+            className='text-blue-600 underline cursor-pointer hover:text-blue-500 transition-all duration-200 ease-linear'
+            >
+              Register now!
+            </Link>
           </div>
         </div>
       </div>

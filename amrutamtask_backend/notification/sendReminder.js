@@ -1,24 +1,33 @@
-const emailjs = require('@emailjs/browser');
+const dotenv = require('dotenv');
+dotenv.config();
+const nodemailer = require('nodemailer');
 
 
-const SendEmail = (name, email, message) => {
-   let templateParams = {
-      to_name: name,
-      to_email: email,
-      message: message,
-   }
+const SendEmail = (to_name, to_email, message, from_email, user_password) => {
 
-   const serviceID = process.env.REACT_APP_EMAIL_SERVICE_ID;
-   const templateID = process.env.REACT_APP_EMAIL_TEMPLATE_ID;
-   const publicKey = process.env.REACT_APP_EMAIL_PUBLIC_KEY;
+   const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+         user: from_email,
+         pass: user_password,
+      },
+   });
 
+   const mailOptions = {
+      from: from_email,
+      to: to_email,
+      subject: `Hello ${to_name || 'Khateeb'}, you have a message`,
+      text: message || 'This is a reminder',
+   };
 
-   emailjs.send(serviceID, templateID, templateParams, publicKey)
-      .then(function (response) {
-         console.log('SUCCESS!', response.status, response.text);
-      }, function (error) {
-         console.log('FAILED...', error);
-      });
+   transporter.sendMail(mailOptions, function (err, info) {
+      if (err) {
+         console.log(err);
+      } else {
+         console.log('Email sent!');
+      }
+   });
 }
+
 
 module.exports = SendEmail;

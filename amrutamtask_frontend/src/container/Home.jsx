@@ -11,9 +11,14 @@ const url = 'http://localhost:5000/api/get-user';
 export default function Home() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleLogout = () => {
+    localStorage.removeItem("TakeYourMedicineAuth");
+    window.location.reload();
+  }
 
   const fetchUser = async (token) => {
-
     if (!token) {
       setUser(null);
       return;
@@ -44,6 +49,7 @@ export default function Home() {
   };
 
   useEffect(() => {
+
     setLoading(true)
     if (localStorage.getItem("TakeYourMedicineAuth")) {
       fetchUser(localStorage.getItem("TakeYourMedicineAuth"));
@@ -66,6 +72,13 @@ export default function Home() {
   return (
     <div className='w-full flex items-center justify-center'>
       <div className='w-1/3 max-md:w-5/6 max-sm:w-11/12 py-6 px-3 flex flex-col items-center justify-center'>
+        {user && (
+          <div className='flex flex-col gap-1'>
+          <h1 className='text-green-800 text-5xl font-bold max-sm:text-3xl'>Hi {user?.name}</h1>
+          <h1 className='text-green-700 text-3xl font-bold max-sm:text-2xl'>Welcome to takeYourMedicine</h1>
+          <p className='text-lg text-gray-400'>powered by AMRUTAM Ayurveda</p>
+          </div>
+        )}
         <img
           src={!user ? LoginImage : AddScheduleImage}
           alt='caring-img'
@@ -93,10 +106,44 @@ export default function Home() {
             </div>
           </>
         ) : (
-          <Link
-            to="/login"
-            className={`bg-blue-600 hover:bg-blue-500 text-white ${commonBtnStyle} text-center`}
-          >Login here!</Link>
+          <div className='w-full flex flex-col gap-3 justify-center items-center'>
+            <Link
+              to="/login"
+              className={`bg-blue-600 hover:bg-blue-500 text-white ${commonBtnStyle} text-center`}
+            >Login here!</Link>
+            <Link
+              to="/signup"
+              className={`bg-blue-600 hover:bg-blue-500 text-white ${commonBtnStyle} text-center`}
+            >Signup!</Link>
+          </div>
+        )}
+      </div>
+
+      <div className='flex gap-3 fixed bottom-2 right-2'>
+        {(!isLoggingOut && user) && (
+          <button
+            className={`${commonBtnStyle} bg-red-500 hover:bg-red-400 text-white w-[100px] text-center`}
+            onClick={() => setIsLoggingOut(true)}
+          >
+            Logout
+          </button>
+        )} 
+        
+        {(isLoggingOut && user) && (
+          <div className='flex gap-3 justify-center'>
+            <button
+              className={`${commonBtnStyle} bg-yellow-400 hover:bg-yellow-300 w-[100px] text-black`}
+              onClick={handleLogout}
+            >
+              Confirm
+            </button>
+            <button
+              className={`${commonBtnStyle} text-yellow-700 hover:text-yellow-600 w-[100px]`}
+              onClick={() => setIsLoggingOut(false)}
+            >
+              Cancel
+            </button>
+          </div>
         )}
       </div>
     </div>

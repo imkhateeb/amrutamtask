@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { isFutureDate, compareDates } from '../../utils/isfutureDate';
 import { useNavigate } from 'react-router-dom';
+import { FaUserCheck } from 'react-icons/fa';
+import getAllCaretaker from '../../utils/getAllCaretaker';
+import getUser from '../../utils/getUser';
 
 import { DatePicker, Space } from 'antd';
 
 import { TimePicker } from 'antd';
 import axios from 'axios';
 import { BeatLoader } from 'react-spinners';
+import { IoCheckmarkDoneCircleSharp } from 'react-icons/io5';
+
 
 const commonDivStyle = 'flex flex-col my-2';
 const commonInputStyle = 'outline-none border-[0.5px] border-white hover:border-blue-300 py-2 px-3 rounded-md transition-all duration-200 ease-linear';
 const commonBtnStyle = 'py-2 w-full rounded-md cursor-pointer transition-all duration-200 ease-linear'
-const url1 = 'http://localhost:5000/api/get-user';
-const url2 = 'http://localhost:5000/api/medicine-schedule';
+
+const url = 'http://localhost:5000/api/medicine-schedule';
 
 
 export default function ScheduleMedicine() {
@@ -30,10 +35,12 @@ export default function ScheduleMedicine() {
   const [serverError, setServerError] = useState(false);
   const [timeSaved, setTimeSaved] = useState(false);
 
+  const [selectCareTaker, setSelectCareTaker] = useState(false);
+  const [caretakers, setCaretakers] = useState([]);
 
   const handleCaretaker = (careBy) => {
     const token = localStorage.getItem("TakeYourMedicineAuth");
-    const {email, contactNo} = user;
+    const { email, contactNo } = user;
     const headers = {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
@@ -42,11 +49,14 @@ export default function ScheduleMedicine() {
 
     try {
       setSaving(true);
-      axios.post(url2, data, {headers})
+      axios.post(url, data, { headers })
         .then((response) => {
           setSaving(false)
           if (response.data.success) {
             setTimeSaved(true);
+
+            const objToSend = { patientName: user?.name, patientEmail: 'trialfree722@gmail.com', from, to, frequency, times, medicineNames };
+
             setTimeout(() => {
               window.location.reload();
             }, 3000);
@@ -65,35 +75,25 @@ export default function ScheduleMedicine() {
     }
   }
 
-  const fetchUser = (token) => {
-    if (!token) {
-      setUser(null);
-      setLoading(false); // Add this line
-      return;
-    }
-    const headers = {
-      'Content-Type': 'application/json',
-      'Authorization': token,
-    };
-    try {
-      axios.get(url1, { headers: headers })
-        .then((response) => {
-          setUser(response.data.user);
-          setLoading(false); // Add this line
-        });
-    } catch (error) {
-      console.log("Error while getting the user", error);
-      setLoading(false); // Add this line
-    }
+  const fetchData = async (token) => {
+    const myUser = await getUser(token);
+    const myCaretakers = await getAllCaretaker();
+    setUser(myUser);
+    setCaretakers(myCaretakers);
+    setLoading(false);
   };
 
   useEffect(() => {
-    setLoading(true);
-    if (localStorage.getItem("TakeYourMedicineAuth")) {
-      fetchUser(localStorage.getItem("TakeYourMedicineAuth"));
-    } else {
-      setLoading(false)
-    }
+    const fetchDataAsync = async () => {
+      setLoading(true);
+      if (localStorage.getItem("TakeYourMedicineAuth")) {
+        await fetchData(localStorage.getItem("TakeYourMedicineAuth"));
+      } else {
+        setLoading(false);
+      }
+    };
+
+    fetchDataAsync();
   }, []);
 
 
@@ -139,12 +139,45 @@ export default function ScheduleMedicine() {
       <div className='flex items-center justify-center h-[60vh] w-full animate-fade-in transition-all duration-300 ease-linear'>
         <div className='flex flex-col items-center justify-center animate-fade-in duration-200 ease-in'>
           <BeatLoader size={30} color='blue' speedMultiplier={2} />
+          <p className='text-center text-lg font-bold'>Getting things ready for you!!</p>
         </div>
       </div>
     )
   }
   if (user === null) {
     navigate("/login")
+  }
+  if (serverError) {
+    return (
+      <div className='flex items-center justify-center h-[60vh] w-full animate-fade-in transition-all duration-300 ease-linear'>
+        <div className='flex flex-col items-center justify-center animate-fade-in duration-200 ease-in'>
+          <FaUserCheck fontSize={50} color='yellow' />
+          <p className='text-black text-xl font-bold text-center'>User does not exist or internal Server Error!</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (saving) {
+    return (
+      <div className='flex items-center justify-center h-[60vh] w-full animate-fade-in transition-all duration-300 ease-linear'>
+        <div className='flex flex-col items-center justify-center animate-fade-in duration-200 ease-in'>
+          <BeatLoader size={30} color='blue' speedMultiplier={2} />
+          <p className='text-center text-lg font-bold'>Sending your request</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (timeSaved) {
+    return (
+      <div className='flex items-center justify-center h-[60vh] w-full animate-fade-in transition-all duration-300 ease-linear'>
+        <div className='flex flex-col items-center justify-center animate-fade-in duration-200 ease-in'>
+          <IoCheckmarkDoneCircleSharp fontSize={50} color='green' />
+          <p className='text-green-600 text-xl font-bold text-center'>Congratulations! your request sent!</p>
+        </div>
+      </div>
+    )
   }
   return (
     <div className='flex justify-center min-h-full w-full animate-fade-in transition-all duration-300 ease-linear'>
@@ -207,19 +240,53 @@ export default function ScheduleMedicine() {
 
         {alltimeEntered && (
           <div className='w-full flex flex-col my-4 gap-3'>
+
             <button
               type='button'
               className={`bg-blue-600 hover:bg-blue-500 text-white ${commonBtnStyle}`}
               onClick={() => handleCaretaker('inperson')}
             >Request for caretaker</button>
+
+            <button
+              type='button'
+              className={`bg-green-600 hover:bg-green-500 text-white ${commonBtnStyle}`}
+              onClick={() => setSelectCareTaker(true)}
+              disabled={selectCareTaker}
+            >Select a caretaker</button>
+
             <button
               type='button'
               className={`bg-yellow-400 hover:bg-yellow-300 text-black ${commonBtnStyle}`}
               onClick={() => handleCaretaker('self')}
             >Notify on Email and SMS</button>
+
           </div>
         )}
       </div>
+      {selectCareTaker && (
+        <div className='flex flex-col gap-2 p-3 absolute bg-yellow-100 w-1/3 max-lg:w-1/2 max-md:w-5/6 max-sm:w-11/12 min-h-[65vh] rounded-xl animate-fade-in duration-200 ease-linear'>
+          {caretakers.length !== 0 && caretakers.map((caretaker) => {
+            const { name, patientCount } = caretaker;
+            return (
+              <div className='flex flex-col cursor-pointer hover:bg-yellow-200 p-2 rounded-xl transition-all duration-200 ease-linear'
+                onClick={() => {
+                  handleCaretaker(caretaker)
+                }}
+                key={caretaker._id}
+              >
+                <p className='text-lg font-bold'>{name}</p>
+                <p className='text-xs font-semibold'>Take care of <span className='text-base font-bold'>{patientCount}</span> peoples</p>
+                <hr />
+              </div>
+            )
+          })}
+          <button
+          type='button'
+          className='py-1 px-2 bg-red-600 hover:bg-red-500 cursor-pointer transition-all duration-200 ease-linear rounded-md text-white w-1/3 absolute bottom-3'
+          onClick={()=>setSelectCareTaker(false)}
+          >Cancel</button>
+        </div>
+      )}
     </div>
   )
 }

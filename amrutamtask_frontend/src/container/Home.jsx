@@ -72,9 +72,15 @@ export default function Home() {
   return (
     <div className='w-full flex items-center justify-center'>
       <div className='w-1/3 max-md:w-5/6 max-sm:w-11/12 py-6 px-3 flex flex-col items-center justify-center'>
-        {user && (
+        {user ? (
           <div className='flex flex-col gap-1'>
           <h1 className='text-green-800 text-5xl font-bold max-sm:text-3xl'>Hi {user?.name}</h1>
+          <h1 className='text-green-700 text-3xl font-bold max-sm:text-2xl'>Welcome to takeYourMedicine</h1>
+          <p className='text-lg text-gray-400'>powered by AMRUTAM Ayurveda</p>
+          </div>
+        ) : (
+          <div className='flex flex-col gap-1'>
+          <h1 className='text-green-800 text-5xl font-bold max-sm:text-3xl'>Hi User</h1>
           <h1 className='text-green-700 text-3xl font-bold max-sm:text-2xl'>Welcome to takeYourMedicine</h1>
           <p className='text-lg text-gray-400'>powered by AMRUTAM Ayurveda</p>
           </div>

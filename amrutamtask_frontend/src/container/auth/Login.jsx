@@ -117,7 +117,7 @@ export default function Login() {
 
           <div className={commonDivStyle}>
             <p className='text-semibold'>Password<span className='text-red-500'>*</span></p>
-            <input type='text' className={commonInputStyle} placeholder='Input your password' onChange={(e) => setPassword(e.target.value)} />
+            <input type='password' className={commonInputStyle} placeholder='Input your password' onChange={(e) => setPassword(e.target.value)} />
             {fields && password.replace(" ", "").length < 6 && (<p className='text-red-500 animate-fade-in duration-200'>Enter valid password!</p>)}
           </div>
 

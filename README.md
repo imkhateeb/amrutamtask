@@ -39,13 +39,22 @@ to send notifications
   - Install dependencies `npm i`
   - setup env
   - Run the server `nodemon app.js`
+
+  #env for backend
 ```
-MONGODB_USERNAME={Username}
-MONGODB_PASSWORD={MongoDB password}
-EXPRESS_APP_JWT_SECRET_KEY={Create your own jwt secret key}
-NODEMAILER_USERNAME={from email}
-NODEMAILER_PASSWORD={email app password}
+MONGODB_USERNAME='your-mongodb-username'
+MONGODB_PASSWORD='your-mongodb-password'
+EXPRESS_APP_JWT_SECRET_KEY='your-jwt-secret-key'
+NODEMAILER_USERNAME='your-nodemailer-from-email'
+NODEMAILER_PASSWORD='your-mail-app-password'
 PORT=5000
+```
+
+  #env for frontend
+```
+REACT_APP_EMAILJS_SERVICE_ID='your-emailjs-service-id'
+REACT_APP_EMAILJS_REMINDER_TEMPLATE_ID='your-emailjs-template-id'
+REACT_APP_EMAILJS_PUBLIC_KEY='your-emailjs-public-key'
 ```
   
 

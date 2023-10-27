@@ -74,7 +74,9 @@ REACT_APP_EMAILJS_PUBLIC_KEY='your-emailjs-public-key'
 ![Screenshot 2023-10-27 004041](https://github.com/imkhateeb/TheHackTrixProject/assets/49562163/a95d1d98-991e-486a-8b99-877770dfb57a)
 
 - Reminder & Notification
-  ![image](https://github.com/imkhateeb/TheHackTrixProject/assets/49562163/1c57a280-e55a-405a-85e9-96e7fcf01d8e)
+![reminder1](https://github.com/imkhateeb/amrutamtask/assets/49562163/63037cb8-d370-4604-abca-0a46ef396797)
+![reminder2](https://github.com/imkhateeb/amrutamtask/assets/49562163/08558c7c-d228-4024-ad4c-608eb3227142)
+
 
 
 ## Tech-Stack

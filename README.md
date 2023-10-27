@@ -71,12 +71,14 @@ PORT=5000
 ## Tech-Stack
 - `React` for building user interface
 - `Tailwindcss` to style user interface
-- `Nodejs & expressjs` a web framework for Node.js, to create web applications and APIs.
-- `MongoDB & Mongoose` uses MongoDB as the database and Mongoose as the ODM (Object Data Modeling) library to interact with and manage the database.
+- `ANTD` for date and time component
+- `NodeJs & expressjs` a web framework for Node.js, to create web applications and APIs.
+- `MongoDB & Mongoose` uses MongoDB as the database and Mongoose as the ODM library to interact and manage with the database.
 - `node-scheduler` leverages Node.js for scheduling tasks, allowing you to automate and manage recurring processes efficiently.
 - `md5` a widely used cryptographic hash function, for data integrity and security purposes.
 - `JWT (JSON Web Tokens)` for secure authentication and data exchange between the client and server.
 - `Nodemailer` a module for Node.js, to send emails programmatically.
+- `EmailJs` to send email to patient directly from the client-side.
 - `Twilio` for seamless integration of SMS, voice, and other communication services.
 - `Git` for version control and is hosted on `GitHub`, making it easy to collaborate, track changes, and manage the project's source code
 - `local storage` for authentication, providing a client-side mechanism for securely managing user authentication and session data.

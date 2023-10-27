@@ -4,6 +4,8 @@ import axios from 'axios';
 import { IoMdCloudDone } from 'react-icons/io';
 import { BeatLoader } from 'react-spinners';
 
+import CreateScheduleAndSend from '../../utils/notificate/mainSender';
+
 import { useNavigate } from 'react-router-dom';
 import { IoCheckmarkDoneCircleSharp } from 'react-icons/io5';
 
@@ -21,6 +23,7 @@ export default function RequestCard({ patientName, caretaker, caretakerName, con
   const [confirmAccept, setConfirmAccept] = useState(false);
   const [getDetails, setGetDetails] = useState(false);
   const [confirmComplete, setConfirmComplete] = useState(false);
+  const [pushing, setPushing] = useState("");
 
   const headers = {
     'Content-Type': 'application/json',
@@ -28,6 +31,11 @@ export default function RequestCard({ patientName, caretaker, caretakerName, con
     'requestId': requestId,
   };
 
+  const handlePush = (message) => {
+    setPushing("pushing");
+    CreateScheduleAndSend({to_name: patientName, to_email: email, message});
+    setPushing('pushed')
+  }
   const handleCompleteCourse = () => {
     setAccepting(true);
     axios.get(url2, {headers})
@@ -37,7 +45,7 @@ export default function RequestCard({ patientName, caretaker, caretakerName, con
       }
     })
     .catch((error)=>{
-
+      console.log(error);
     })
   }
 
@@ -47,6 +55,7 @@ export default function RequestCard({ patientName, caretaker, caretakerName, con
     try {
       setAccepting(true);
       const response = await axios.get(url, { headers });
+
       setAccepted(true);
       setTimeout(() => {
         navigate("/caretaker/my-patient-list");
@@ -151,10 +160,10 @@ export default function RequestCard({ patientName, caretaker, caretakerName, con
                   <button
                     type='button'
                     className='cursor-pointer py-1 mt-5 px-3 bg-yellow-400 hover:bg-yellow-300 text-black transition-all duration-200 ease-linear rounded-md '
-                    onClick={handleAccept}
-                    disabled={true}
+                    onClick={() => handlePush(`Hey ${patientName}, it's your medication time.`)}
+                    disabled={pushing === 'pushed' || pushing === 'pushing'}
                   >
-                    {accepting ? 'Pushing...' : 'Push SMS!'}
+                    {(pushing === 'pushed' || pushing === 'pushing') ? pushing.toLocaleUpperCase() : 'Push SMS!'}
                   </button>
 
                   <button

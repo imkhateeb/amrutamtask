@@ -40,7 +40,7 @@ to send notifications
   - setup env
   - Run the server `nodemon app.js`
 
-  #env for backend
+ - env for backend
 ```
 MONGODB_USERNAME='your-mongodb-username'
 MONGODB_PASSWORD='your-mongodb-password'
@@ -50,7 +50,7 @@ NODEMAILER_PASSWORD='your-mail-app-password'
 PORT=5000
 ```
 
-  #env for frontend
+ - env for frontend
 ```
 REACT_APP_EMAILJS_SERVICE_ID='your-emailjs-service-id'
 REACT_APP_EMAILJS_REMINDER_TEMPLATE_ID='your-emailjs-template-id'
